@@ -21,6 +21,7 @@
 
 //wall size in bytes
 #define WALL_SIZE 6*480/SCALING_FACTOR
+#define BINARY_IMG_SIZE 640*480/8
 // Timing shizzle
 /*
 int Status;
@@ -72,7 +73,7 @@ int main(void)
 {
 	char* wall_sets = init_walls();
 	
-	char* bin_img = malloc(640*480/8);
+	char bin_img[BINARY_IMAGE_SIZE];
 
 	time_t t;
 	int curr_wall;
