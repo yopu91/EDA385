@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "image_cleanup.h"
+#include "constants.h"
 
 bool check_overlap(char* wall, char* bin_img){
 	
@@ -9,13 +10,15 @@ bool check_overlap(char* wall, char* bin_img){
 	*	Check for overlap between bin_img and wall
 	*/
 	int i;
-	int end = strlen(bin_img);
-	for (i = 0; i < end; i++) {
-	    if (*wall & *bin_img) return true;
+	for (i = 0; i < BINARY_IMAGE_SIZE; i++) {
+	    if (*wall & *bin_img) return 1;
 	    wall++;
-	    bin++;
+	    bin_img++;
 	}	
-	return false;
+	return 0;
+	/*
+	*	return true/false
+	*/
 	/*
 	*	return true/false
 	*/

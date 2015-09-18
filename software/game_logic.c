@@ -9,9 +9,9 @@
 #include "image_cleanup.h"
 #include "overlap_detect.h"
 ////////////////////////////////////////////////////////
-#include "xuartlite_l.h"
-#include "xparameters.h"
-#include "xtmrctr.h"
+//#include "xuartlite_l.h"
+//#include "xparameters.h"
+//#include "xtmrctr.h"
 ////////////////////////////////////////////////////////
 #define TMRCTR_DEVICE_ID	XPAR_TMRCTR_0_DEVICE_ID
 #define TIMER_COUNTER_0	 0
@@ -21,7 +21,7 @@
 
 //wall size in bytes
 #define WALL_SIZE 6*480/SCALING_FACTOR
-#define BINARY_IMG_SIZE 640*480/8
+#define BINARY_IMAGE_SIZE 640*480/8
 // Timing shizzle
 /*
 int Status;
