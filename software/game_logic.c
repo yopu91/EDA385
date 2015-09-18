@@ -8,18 +8,51 @@
 
 #include "image_cleanup.h"
 #include "overlap_detect.h"
+////////////////////////////////////////////////////////
+#include "xuartlite_l.h"
+#include "xparameters.h"
+#include "xtmrctr.h"
+////////////////////////////////////////////////////////
+#define TMRCTR_DEVICE_ID	XPAR_TMRCTR_0_DEVICE_ID
+#define TIMER_COUNTER_0	 0
 
 #define WALLCOUNT 3
 #define SCALING_FACTOR 10
 
 //wall size in bytes
 #define WALL_SIZE 6*480/SCALING_FACTOR
+// Timing shizzle
+/*
+int Status;
+	u32 Value1;
+	u32 Value2;
+	XTmrCtr TimerCounter;
+	XTmrCtr *TmrCtrInstancePtr = &TimerCounter;
+	Status = XTmrCtr_Initialize(TmrCtrInstancePtr, TMRCTR_DEVICE_ID);
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
+	XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0,
+			XTC_AUTO_RELOAD_OPTION);
+
+	Value1 = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
+	
+	XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
+	//--- divide here
+	Value2 = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
+
+	XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
+	xil_printf("cycles: %d\n", Value2 - Value1);
+*/
+
+
+
 
 
 
 /*
 *	Wall data strucure: Draw until 1st column, start again at 2nd column and draw until 3rd column ... 
-*	one wall = 8 * 6 * 480 * SCALING_FACTOR bits
+*	one wall = 8 * 6 * 480 / SCALING_FACTOR bits
 *	---------------- 255,	255,	255,	255,	255,	255
 *	---------------- 255,	255,	255,	255,	255,	255
 *	-----o-o-o------ 5,		6,		7,		8,		9,		10
