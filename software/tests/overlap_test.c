@@ -26,9 +26,7 @@ int percentage_overlap(unsigned char* wall, unsigned char* bin_img)
 	    if (wall[i] & bin_img[i] & bit) pixels_overlapping++;
 	}
     }
-    double q = (double)pixels_overlapping / ((double)(BINARY_IMAGE_SIZE) * 8.0);
-    q *= 100;
-    return (int)q;
+    return (100*pixels_overlapping) / (BINARY_IMAGE_SIZE * 8.0);
 }
 
 int main(int argc, char *argv[])
@@ -39,7 +37,7 @@ int main(int argc, char *argv[])
     int i;
     for (i = 0; i < BINARY_IMAGE_SIZE; i++) {
 	wall1[i] = 255;
-	bin_img1[i] = 3;
+	bin_img1[i] = 1;
     }
     //bin_img1[480] = 1;
 
