@@ -71,10 +71,23 @@ char* init_walls();
 
 int main(void)
 {
+
+	int Status;
+		u32 time_now;
+		u32 end_timer;
+		XTmrCtr TimerCounter;
+		XTmrCtr *TmrCtrInstancePtr = &TimerCounter;
+		Status = XTmrCtr_Initialize(TmrCtrInstancePtr, TMRCTR_DEVICE_ID);
+		if (Status != XST_SUCCESS) {
+			return XST_FAILURE;
+		}
+		XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0,
+				XTC_AUTO_RELOAD_OPTION);
+
 	/*
 	*	Protocol for sending data to HW
-	*	bit#	0-23 Necessary padding?			0-1					2				3						4-7 
-	*									"Special Image"		Wall Available		Pass/Fail		Timer to display
+	*	bit#	0-23 Necessary padding?			0-1								2								3-6								7
+	*															"Special Image"		Wall Available		Timer to display	 Pass/Fail
 	*	If the Wall Available bit it set, the protocol message is followed by the wall image
 	*/
 
@@ -95,81 +108,58 @@ int main(void)
 	int curr_wall;
 	bool fail;
 
-	clock_t end_timer;
-	clock_t time_now;
-
-	//what seed to use?
-	srand((unsigned) time(&t));
+	//what seed to use? maybe use the binary camera image somehow?
+//	srand((unsigned) time(&t));
 
 	while(1){
 		/*
 		* Create a 2 second delay between walls
 		*/
 		time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
-		XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		end_timer = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0) + 200000000;
-		XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
+		XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
 
 		//busy wait, how to fix?
 		while(time_now < end_timer){
 			time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		}
-
-
+		XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
 
 		curr_wall_index = rand() % WALLCOUNT;
 
 		/*
 		*	send wall image to hardware
 		*/
-		protocol = 35;
-		putfsl(protocol, 0); // 00100011
+		protocol = 38;			// 00100110
+		putfsl(protocol, 0);
 		(int*) curr_wall = &(wall_sets+curr_wall_index*WALL_SIZE);
 		for(int i = 0; i<WALL_SIZE/4, i++){
 			putfsl(curr_wall+i, 0);
 		}
 
 
-		// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		/*
-		*	Wait x seconds before checking for overlap. Display a countdown timer every second?
-		*/
-		// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-		// ---------------------------------------------------------------
-		/*
-		* 	Alternative approach, check for overlaps during "downtime" to have real time feedback on
-		*	fail och passing state
-		*/
-		/* Timer for non-board
-		time_now = clock();
-		*/
-
-		/* Timer for board
-		*/
-		time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
-		XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
-
 		/*
 		*	The exact timings might have to be adjusted depending on how long it takes to generate the
 		*	binary image
 		*/
+
 		/*	Timer for non-board
 		end_timer = clock() + 300000000; // 3 sec delay with 100Mhz clock,
 		*/
+
 		/*	Timer for board
 		*/
+		time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		end_timer = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0) + 300000000;
+		XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		while(time_now < end_timer){
 			unsigned char display_time = ((end_timer - time_now) / 100000000) + 1; // countdown timer to be displayed
-
 			bool fail = check_overlap(&wall_sets[curr_wall*WALL_SIZE], bin_img);
-
-
 		/*
 		*	Send fail and display_time to HW to indicate passing or failing state and time remaining.
 		*/
+		protocol = (display_time << 1) | fail;	 // 000TTTTF
+		putfsl(protocol, 0);
 		/*	Timer for non-board
 			time_now = clock(); // updating the timer
 		*/
@@ -177,10 +167,8 @@ int main(void)
 		/*	Timer for board
 		*/
 			time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
-			XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
-			XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
-
 		}
+		XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
 		// ---------------------------------------------------------------
 
 		bool fail = check_overlap(&wall_sets[curr_wall*WALL_SIZE], bin_img);
@@ -189,7 +177,8 @@ int main(void)
 		*		send result and timer(0) to HW (display "FAIL!" || "PASS!" image stored in hw?)
 		*		probably add a delay here as well.
 		*/
-
+		protocol = 0 | fail;
+		putfsl(protocol, 0);
 	}
 
 
