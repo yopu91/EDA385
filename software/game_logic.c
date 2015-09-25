@@ -86,8 +86,8 @@ int main(void)
 
 	/*
 	*	Protocol for sending data to HW
-	*	bit#	0-23 Necessary padding?			0-1								2								3-6								7
-	*															"Special Image"		Wall Available		Timer to display	 Pass/Fail
+	*	bit#	0-23 Necessary padding?			0-1					2					3-6					7
+	*										"Special Image"		Wall Available		Timer to display	 Pass/Fail
 	*	If the Wall Available bit it set, the protocol message is followed by the wall image
 	*/
 
@@ -103,9 +103,8 @@ int main(void)
 	char* wall_sets = init_walls();
 
 	char bin_img[BINARY_IMAGE_SIZE];
-
-	time_t t;
-	int curr_wall;
+	unsigned int curr_wall_index;
+	int* curr_wall;
 	bool fail;
 
 	//what seed to use? maybe use the binary camera image somehow?
@@ -132,8 +131,9 @@ int main(void)
 		*/
 		protocol = 38;			// 00100110
 		putfsl(protocol, 0);
-		(int*) curr_wall = &(wall_sets+curr_wall_index*WALL_SIZE);
-		for(int i = 0; i<WALL_SIZE/4, i++){
+		curr_wall = ((int*)wall_sets+curr_wall_index*WALL_SIZE);
+		int i;
+		for(i = 0; i<WALL_SIZE/4; i++){
 			putfsl(curr_wall+i, 0);
 		}
 
@@ -154,24 +154,19 @@ int main(void)
 		XTmrCtr_Start(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		while(time_now < end_timer){
 			unsigned char display_time = ((end_timer - time_now) / 100000000) + 1; // countdown timer to be displayed
-			bool fail = check_overlap(&wall_sets[curr_wall*WALL_SIZE], bin_img);
+			fail = check_overlap((char*) curr_wall, (char*) &bin_img);
 		/*
 		*	Send fail and display_time to HW to indicate passing or failing state and time remaining.
 		*/
 		protocol = (display_time << 1) | fail;	 // 000TTTTF
 		putfsl(protocol, 0);
-		/*	Timer for non-board
-			time_now = clock(); // updating the timer
-		*/
-
-		/*	Timer for board
-		*/
-			time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
+		time_now = XTmrCtr_GetValue(TmrCtrInstancePtr, TIMER_COUNTER_0);
 		}
+
 		XTmrCtr_SetOptions(TmrCtrInstancePtr, TIMER_COUNTER_0, 0);
 		// ---------------------------------------------------------------
 
-		bool fail = check_overlap(&wall_sets[curr_wall*WALL_SIZE], bin_img);
+		fail = check_overlap((char*) curr_wall, (char*) &bin_img);
 
 		/*
 		*		send result and timer(0) to HW (display "FAIL!" || "PASS!" image stored in hw?)
