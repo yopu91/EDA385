@@ -2,7 +2,7 @@
 #include "image_cleanup.h"
 #include "constants.h"
 
-bool check_overlap(char* wall, char* bin_img){
+bool check_overlap(unsigned int* wall, unsigned int* bin_img){
 	
 	clean_img(bin_img);
 	
@@ -11,15 +11,23 @@ bool check_overlap(char* wall, char* bin_img){
 	*/
 	int i;
 	for (i = 0; i < BINARY_IMAGE_SIZE; i++) {
-	    if (*wall & *bin_img) return 1;
-	    wall++;
-	    bin_img++;
+	    if (wall[i] & bin_img[i]) return 1;
 	}	
 	return 0;
-	/*
-	*	return true/false
-	*/
-	/*
-	*	return true/false
-	*/
 }
+
+
+int percentage_overlap(unsigned int *wall, unsigned int *bin_img) {
+
+    clean_img(bin_img);
+    int pixels_overlapping = 0;
+    int i;
+    unsigned int bit;
+    for (i = 0; i < BINARY_IMAGE_SIZE; i++) {
+	for (bit = 1; bit <= (1 << 32); bit = bit << 1) {
+	    if (wall[i] & bin_img[i] & bit) pixels_overlapping++;
+	}
+    }
+    return (100*pixels_overlapping) / (BINARY_IMAGE_SIZE * 8.0);
+}
+

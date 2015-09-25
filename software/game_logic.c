@@ -67,7 +67,7 @@ int Status;
 *	if we dont use the entire width of the screen for walls we'll save even less memory.
 */
 
-char* init_walls();
+unsigned char* init_walls();
 
 int main(void)
 {
@@ -97,12 +97,12 @@ int main(void)
 	*/
 
 
-	char protocol = 192; // 11000000
+	unsigned char protocol = 192; // 11000000
 	putfsl(protocol, 0);
 
-	char* wall_sets = init_walls();
-
-	char bin_img[BINARY_IMAGE_SIZE];
+	unsigned int* wall_sets = init_walls();
+	unsigned int bin_img[BINARY_IMAGE_SIZE];
+	time_t t;
 	unsigned int curr_wall_index;
 	int* curr_wall;
 	bool fail;
@@ -131,7 +131,7 @@ int main(void)
 		*/
 		protocol = 38;			// 00100110
 		putfsl(protocol, 0);
-		curr_wall = ((int*)wall_sets+curr_wall_index*WALL_SIZE);
+		curr_wall = &(wall_sets+curr_wall_index*WALL_SIZE);
 		int i;
 		for(i = 0; i<WALL_SIZE/4; i++){
 			putfsl(curr_wall+i, 0);
@@ -179,8 +179,8 @@ int main(void)
 
 }
 
-char* init_walls(void){
-	char* walls = calloc(WALLCOUNT*WALL_SIZE, sizeof(char));
+unsigned int* init_walls(void){
+	unsigned int* walls = calloc(WALLCOUNT*WALL_SIZE, sizeof(unsigned char));
 
 	// Create walls
 	return walls;
