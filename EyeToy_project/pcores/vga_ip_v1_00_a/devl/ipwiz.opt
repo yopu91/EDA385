@@ -1,0 +1,12 @@
+-batch 
+-create vga_ip 
+-ver 1.00.a 
+-dir C:\temp\ 
+-lang vhdl 
+-bus fsl ms 
+-xps 
+-totalin 8
+-totalout 8
+-argin 1
+-argout 1
+-desc "new FSL core"

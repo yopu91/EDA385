@@ -1,0 +1,9 @@
+-batch 
+-create vga_ip 
+-ver 2.00.a 
+-dir "C:\temp" 
+-lang vhdl 
+-bus axi4lite s 
+-reg 4 
+-xps 
+-driver 

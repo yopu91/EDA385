@@ -1,0 +1,4 @@
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/vga_controller.syr" 

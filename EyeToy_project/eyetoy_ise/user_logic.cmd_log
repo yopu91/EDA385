@@ -1,0 +1,13 @@
+xst -intstyle ise -ifn "C:/temp/eyetoy_ise/user_logic.xst" -ofn "C:/temp/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/eyetoy_ise/user_logic.xst" -ofn "C:/temp/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+xst -intstyle ise -ifn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.xst" -ofn "C:/temp/EyeToy_project/eyetoy_ise/user_logic.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -i -p xc6slx16-csg324-3 user_logic.ngc user_logic.ngd  
+map -intstyle ise -p xc6slx16-csg324-3 -w -logic_opt off -ol high -t 1 -xt 0 -register_duplication off -r 4 -global_opt off -mt off -ir off -pr off -lc off -power off -o user_logic_map.ncd user_logic.ngd user_logic.pcf 
+par -w -intstyle ise -ol high -mt off user_logic_map.ncd user_logic.ncd user_logic.pcf 
+trce -intstyle ise -v 3 -s 3 -n 3 -fastpaths -xml user_logic.twx user_logic.ncd -o user_logic.twr user_logic.pcf 

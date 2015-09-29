@@ -1,0 +1,7 @@
+INFILE=C:\temp\implementation\eyetoy.ncd
+OUTFILE=C:\temp\implementation\eyetoy.bit
+FAMILY=Spartan6
+PART=xc6slx16-3csg324
+WORKINGDIR=C:\temp\implementation
+LICENSE=ISE
+USER_INFO=174123230_174123231_174417893_548

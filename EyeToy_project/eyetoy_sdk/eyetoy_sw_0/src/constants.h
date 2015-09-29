@@ -1,0 +1,2 @@
+#define BINARY_IMAGE_SIZE 640*480
+#define WALL_SIZE 640*480

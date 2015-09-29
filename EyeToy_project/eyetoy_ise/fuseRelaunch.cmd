@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "secureip" -o "C:/temp/EyeToy_project/eyetoy_ise/vga_testbench_isim_beh.exe" -prj "C:/temp/EyeToy_project/eyetoy_ise/vga_testbench_beh.prj" "work.vga_testbench" 
